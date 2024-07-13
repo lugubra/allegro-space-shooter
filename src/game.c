@@ -62,6 +62,9 @@ void draw_game(Game *game, float now) {
     draw_ship(game->ship);
     draw_asteroids(game, now);
     draw_bullets(game->ship->gun->bullets);
+
+    /** continue programming from the ship_crashed event */
+    ship_crashed(game);
 }
 
 void draw_hud(Game *game) {
@@ -105,6 +108,23 @@ void draw_bullets(Bullet *bullets) {
     bullets_render(bullets);
 }
 
+void ship_crashed(Game *game) {
+    for (int i = 0; i < ASTEROIDS_MAX; ++i)
+    {
+        if (game->asteroids[i].alive)
+        {
+            Rectangle asteroid_area = get_asteroid_area(game->asteroids[i]);
+            Rectangle ship_area = get_ship_area(game->ship);
+
+            if (collision(asteroid_area, ship_area))
+            {
+                printf("%s\n", "crash");
+                game->lives--;
+            }
+        }
+    }
+}
+
 void add_asteroid(Game *game, float now) {
     // Add asteroid if spawn time elapsed
     if (now > game->asteroid_spawn)
@@ -118,6 +138,27 @@ void add_asteroid(Game *game, float now) {
             game->asteroid_spawn_turn = 0;
         }
     }
+}
+
+bool collision(Rectangle object_1, Rectangle object_2)
+{
+    return
+        point_inside_rectangle(object_1, object_2.x1, object_2.y1) ||
+        point_inside_rectangle(object_1, object_2.x1, object_2.y2) ||
+        point_inside_rectangle(object_1, object_2.x2, object_2.y1) ||
+        point_inside_rectangle(object_1, object_2.x2, object_2.y2);
+}
+
+bool point_inside_rectangle(Rectangle rectangle, int x, int y)
+{
+    if (
+        x > rectangle.x1 && x < rectangle.x2 &&
+        y > rectangle.y1 && y < rectangle.y2
+    ) {
+        return true;
+    }
+
+    return false;
 }
 
 void destroy_game(Game *game) {

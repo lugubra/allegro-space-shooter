@@ -97,3 +97,14 @@ void ship_move_left(Ship *ship) {
 
     ship->gun->pos[X1] = ship->pos[X1] + SHIP_WIDTH_HALF;
 }
+
+Rectangle get_ship_area(Ship *ship) {
+    Rectangle area;
+
+    area.x1 = ship->pos[X1];
+    area.y1 = ship->pos[Y1];
+    area.x2 = ship->pos[X2];
+    area.y2 = ship->pos[Y2];
+
+    return area;
+}

@@ -63,6 +63,8 @@ int main()
         al_flip_display();
     }
 
+    printf("%s\n", "GAME OVER");
+
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

@@ -32,6 +32,17 @@ Asteroid new_asteroid() {
     return asteroid;
 }
 
+Rectangle get_asteroid_area(Asteroid asteroid) {
+    Rectangle area;
+
+    area.x1 = asteroid.x - ASTEROID_RADIUS;
+    area.y1 = asteroid.y - ASTEROID_RADIUS;
+    area.x2 = asteroid.x + ASTEROID_RADIUS;
+    area.y2 = asteroid.y + ASTEROID_RADIUS;
+
+    return area;
+}
+
 void asteroid_insert_in_list(Asteroid *list, int pos) {
     list[pos] = new_asteroid();
     list[pos].alive = true;

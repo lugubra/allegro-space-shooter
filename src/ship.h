@@ -3,6 +3,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "./rectangle.h"
 #include "./gun.h"
 
 #define SHIP_WIDTH 35
@@ -29,5 +30,6 @@ void ship_move_up(Ship*);
 void ship_move_right(Ship*);
 void ship_move_down(Ship*);
 void ship_move_left(Ship*);
+Rectangle get_ship_area(Ship*);
 
 #endif
