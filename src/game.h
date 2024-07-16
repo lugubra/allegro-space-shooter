@@ -7,7 +7,7 @@
 #include "./asteroids.h"
 #include "./ship.h"
 #include "./bullets.h"
-#include "./rectangle.h"
+#include "./physics.h"
 
 #define BORDER_LIMIT 10
 #define BORDER_TOP_X BORDER_LIMIT
@@ -62,8 +62,6 @@ void ship_crashed(Game*);
 void add_asteroid(Game*, float);
 
 bool collision(Rectangle, Rectangle);
-
-bool point_inside_rectangle(Rectangle, int, int);
 
 void destroy_game(Game*);
 

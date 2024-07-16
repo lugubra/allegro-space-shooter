@@ -98,6 +98,10 @@ void ship_move_left(Ship *ship) {
     ship->gun->pos[X1] = ship->pos[X1] + SHIP_WIDTH_HALF;
 }
 
+void ship_render(Ship *ship) {
+    al_draw_bitmap(ship->skin, ship->pos[X1], ship->pos[Y1], ALLEGRO_ALIGN_CENTER);
+}
+
 Rectangle get_ship_area(Ship *ship) {
     Rectangle area;
 

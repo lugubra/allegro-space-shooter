@@ -27,18 +27,33 @@ Asteroid new_asteroid() {
 
     asteroid.x = rand() % max + min;
     asteroid.y = BORDER_TOP_Y + ASTEROID_RADIUS;
+
+    // asteroid.coordinate = asteroid_initial_position();
+    asteroid.area = get_asteroid_area(asteroid.x, asteroid.y);
     asteroid.alive = false;
 
     return asteroid;
 }
 
-Rectangle get_asteroid_area(Asteroid asteroid) {
+// Point asteroid_initial_position() {
+//     Point coordinate;
+
+//     int min = BORDER_TOP_X + ASTEROID_RADIUS;
+//     int max = BORDER_BOTTOM_X - ASTEROID_RADIUS - min;
+
+//     coordinate.x = rand() % max + min;
+//     coordinate.y = BORDER_TOP_Y + ASTEROID_RADIUS;
+
+//     return coordinate;
+// }
+
+Rectangle get_asteroid_area(int x, int y) {
     Rectangle area;
 
-    area.x1 = asteroid.x - ASTEROID_RADIUS;
-    area.y1 = asteroid.y - ASTEROID_RADIUS;
-    area.x2 = asteroid.x + ASTEROID_RADIUS;
-    area.y2 = asteroid.y + ASTEROID_RADIUS;
+    area.x1 = x - ASTEROID_RADIUS;
+    area.y1 = y - ASTEROID_RADIUS;
+    area.x2 = x + ASTEROID_RADIUS;
+    area.y2 = y + ASTEROID_RADIUS;
 
     return area;
 }
@@ -48,26 +63,26 @@ void asteroid_insert_in_list(Asteroid *list, int pos) {
     list[pos].alive = true;
 }
 
-void asteroids_move(Asteroid *list) {
+void asteroids_move(Asteroid *asteroids) {
     for (int i = 0; i < ASTEROIDS_MAX; ++i)
     {
-        if (list[i].alive)
-        {
-            list[i].y = list[i].y + ASTEROID_SPEED;
-            if (list[i].y > BORDER_BOTTOM_Y-ASTEROID_RADIUS)
-            {
-                list[i] = new_asteroid();
+        if (asteroids[i].alive) {
+            asteroids[i].y += ASTEROID_SPEED;
+            asteroids[i].area = get_asteroid_area(asteroids[i].x, asteroids[i].y);
+
+            if (asteroids[i].y > BORDER_BOTTOM_Y-ASTEROID_RADIUS) {
+                asteroids[i] = new_asteroid();
             }
         }
     }
 }
 
-void asteroids_render(Asteroid *list) {
+void asteroids_render(Asteroid *asteroids) {
     for (int i = 0; i < ASTEROIDS_MAX; ++i)
     {
-        if (list[i].alive)
+        if (asteroids[i].alive)
         {
-            al_draw_filled_circle(list[i].x, list[i].y, ASTEROID_RADIUS, al_map_rgb(140, 70, 0));
+            al_draw_filled_circle(asteroids[i].x, asteroids[i].y, ASTEROID_RADIUS, al_map_rgb(140, 70, 0));
         }
     }
 }

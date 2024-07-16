@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h>
@@ -9,6 +10,7 @@
 #include "./game.h"
 #include "./ship.h"
 #include "./asteroids.h"
+#include "./physics.h"
 
 ALLEGRO_FONT *font = NULL;
 
@@ -94,7 +96,7 @@ void draw_hud(Game *game) {
 }
 
 void draw_ship(Ship *ship) {
-    al_draw_bitmap(ship->skin, ship->pos[X1], ship->pos[Y1], ALLEGRO_ALIGN_CENTER);
+    ship_render(ship);
 }
 
 void draw_asteroids(Game *game, float now) {
@@ -113,12 +115,12 @@ void ship_crashed(Game *game) {
     {
         if (game->asteroids[i].alive)
         {
-            Rectangle asteroid_area = get_asteroid_area(game->asteroids[i]);
             Rectangle ship_area = get_ship_area(game->ship);
 
-            if (collision(asteroid_area, ship_area))
+            if (collision(game->asteroids[i].area, ship_area))
             {
                 printf("%s\n", "crash");
+                game->asteroids[i] = new_asteroid();
                 game->lives--;
             }
         }
@@ -138,27 +140,6 @@ void add_asteroid(Game *game, float now) {
             game->asteroid_spawn_turn = 0;
         }
     }
-}
-
-bool collision(Rectangle object_1, Rectangle object_2)
-{
-    return
-        point_inside_rectangle(object_1, object_2.x1, object_2.y1) ||
-        point_inside_rectangle(object_1, object_2.x1, object_2.y2) ||
-        point_inside_rectangle(object_1, object_2.x2, object_2.y1) ||
-        point_inside_rectangle(object_1, object_2.x2, object_2.y2);
-}
-
-bool point_inside_rectangle(Rectangle rectangle, int x, int y)
-{
-    if (
-        x > rectangle.x1 && x < rectangle.x2 &&
-        y > rectangle.y1 && y < rectangle.y2
-    ) {
-        return true;
-    }
-
-    return false;
 }
 
 void destroy_game(Game *game) {

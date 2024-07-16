@@ -3,7 +3,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "./rectangle.h"
+#include "./physics.h"
 
 #define ASTEROID_INIT_Y 22
 #define ASTEROID_RADIUS 8
@@ -15,12 +15,15 @@
 typedef struct Asteroid {
     int x;
     int y;
+    // Point coordinate;
+    Rectangle area;
     bool alive;
 } Asteroid;
 
 Asteroid* asteroids_init();
 Asteroid new_asteroid();
-Rectangle get_asteroid_area(Asteroid);
+// Point asteroid_initial_position();
+Rectangle get_asteroid_area(int, int);
 
 void asteroid_insert_in_list(Asteroid*, int);
 void asteroids_move(Asteroid*);
