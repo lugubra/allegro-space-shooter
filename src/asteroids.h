@@ -13,16 +13,14 @@
 #define ASTEROIDS_MAX 10
 
 typedef struct Asteroid {
-    int x;
-    int y;
-    // Point coordinate;
+    Point coordinate;
     Rectangle area;
     bool alive;
 } Asteroid;
 
 Asteroid* asteroids_init();
 Asteroid new_asteroid();
-// Point asteroid_initial_position();
+Point asteroid_initial_position();
 Rectangle get_asteroid_area(int, int);
 
 void asteroid_insert_in_list(Asteroid*, int);
