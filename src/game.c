@@ -115,9 +115,7 @@ void ship_crashed(Game *game) {
     {
         if (game->asteroids[i].alive)
         {
-            Rectangle ship_area = get_ship_area(game->ship);
-
-            if (collision(game->asteroids[i].area, ship_area))
+            if (collision(game->asteroids[i].area, game->ship->area))
             {
                 printf("%s\n", "crash");
                 game->asteroids[i] = new_asteroid();

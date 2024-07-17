@@ -21,7 +21,7 @@ typedef struct Asteroid {
 Asteroid* asteroids_init();
 Asteroid new_asteroid();
 Point asteroid_initial_position();
-Rectangle get_asteroid_area(int, int);
+Rectangle get_asteroid_area(Point);
 
 void asteroid_insert_in_list(Asteroid*, int);
 void asteroids_move(Asteroid*);

@@ -23,7 +23,7 @@ Asteroid new_asteroid() {
     Asteroid asteroid;
 
     asteroid.coordinate = asteroid_initial_position();
-    asteroid.area = get_asteroid_area(asteroid.coordinate.x, asteroid.coordinate.y);
+    asteroid.area = get_asteroid_area(asteroid.coordinate);
     asteroid.alive = false;
 
     return asteroid;
@@ -41,13 +41,13 @@ Point asteroid_initial_position() {
     return coordinate;
 }
 
-Rectangle get_asteroid_area(int x, int y) {
+Rectangle get_asteroid_area(Point coordinate) {
     Rectangle area;
 
-    area.x1 = x - ASTEROID_RADIUS;
-    area.y1 = y - ASTEROID_RADIUS;
-    area.x2 = x + ASTEROID_RADIUS;
-    area.y2 = y + ASTEROID_RADIUS;
+    area.x1 = coordinate.x - ASTEROID_RADIUS;
+    area.y1 = coordinate.y - ASTEROID_RADIUS;
+    area.x2 = coordinate.x + ASTEROID_RADIUS;
+    area.y2 = coordinate.y + ASTEROID_RADIUS;
 
     return area;
 }
@@ -62,7 +62,7 @@ void asteroids_move(Asteroid *asteroids) {
     {
         if (asteroids[i].alive) {
             asteroids[i].coordinate.y += ASTEROID_SPEED;
-            asteroids[i].area = get_asteroid_area(asteroids[i].coordinate.x, asteroids[i].coordinate.y);
+            asteroids[i].area = get_asteroid_area(asteroids[i].coordinate);
 
             if (asteroids[i].coordinate.y > BORDER_BOTTOM_Y-ASTEROID_RADIUS) {
                 asteroids[i] = new_asteroid();
@@ -76,7 +76,12 @@ void asteroids_render(Asteroid *asteroids) {
     {
         if (asteroids[i].alive)
         {
-            al_draw_filled_circle(asteroids[i].coordinate.x, asteroids[i].coordinate.y, ASTEROID_RADIUS, al_map_rgb(140, 70, 0));
+            al_draw_filled_circle(
+                asteroids[i].coordinate.x,
+                asteroids[i].coordinate.y,
+                ASTEROID_RADIUS,
+                al_map_rgb(140, 70, 0)
+            );
         }
     }
 }

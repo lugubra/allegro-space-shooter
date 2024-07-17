@@ -11,13 +11,9 @@
 #define SHIP_SPEED 5
 #define SHIP_WIDTH_HALF SHIP_WIDTH / 2
 
-typedef enum {
-    X1, Y1, X2, Y2
-} ShipPos;
-
 typedef struct Ship {
 	ALLEGRO_BITMAP *skin;
-	int pos[4];
+	Point coordinate;
 	Rectangle area;
 	Gun *gun;
 } Ship;
@@ -32,6 +28,7 @@ void ship_move_right(Ship*);
 void ship_move_down(Ship*);
 void ship_move_left(Ship*);
 void ship_render(Ship *ship);
-Rectangle get_ship_area(Ship*);
+Point ship_initial_position();
+Rectangle get_ship_area(Point);
 
 #endif

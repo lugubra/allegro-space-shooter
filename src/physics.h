@@ -2,15 +2,15 @@
 #define _PHYSICS_H
 
 typedef struct Rectangle {
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    float x1;
+    float y1;
+    float x2;
+    float y2;
 } Rectangle;
 
 typedef struct Point {
-    int x;
-    int y;
+    float x;
+    float y;
 } Point;
 
 bool collision(Rectangle, Rectangle);

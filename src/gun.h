@@ -4,6 +4,7 @@
 #include <allegro5/allegro.h>
 
 #include "./bullets.h"
+#include "./physics.h"
 
 #define GUN_RELOAD 0.2
 #define GUN_SHOOT_SPEED 6
@@ -12,10 +13,10 @@ typedef struct Gun {
     Bullet *bullets;
     float reload;
     int chamber;
-    int pos[2];
+    float pos[2];
 } Gun;
 
-Gun* new_gun();
+Gun* new_gun(Point);
 
 void gun_insert_bullet_in_chamber(Gun*);
 

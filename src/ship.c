@@ -13,14 +13,12 @@ Ship* new_ship() {
 
     ship->skin = ship_load_skin();
 
-    ship->pos[4];
+    ship->coordinate = ship_initial_position();
+    ship->area = get_ship_area(ship->coordinate);
 
-    ship->pos[X1] = SCREEN_WIDTH/2;
-    ship->pos[Y1] = SCREEN_HEIGHT-BORDER_LIMIT-45;
-    ship->pos[X2] = ship->pos[X1] + SHIP_WIDTH;
-    ship->pos[Y2] = ship->pos[Y1] + SHIP_HEIGHT;
+    printf("Ship initial X: %.2f; Ship initial Y: %.2f\n", ship->coordinate.x, ship->coordinate.y);
 
-    ship->gun = new_gun(ship->pos);
+    ship->gun = new_gun(ship->coordinate);
 
     return ship;
 }
@@ -31,6 +29,26 @@ ALLEGRO_BITMAP* ship_load_skin() {
     ALLEGRO_BITMAP *skin = al_load_bitmap(al_path_cstr(path, '/'));
     al_destroy_path(path);
     return skin;
+}
+
+Point ship_initial_position() {
+    Point coordinate = {
+        .x = SCREEN_WIDTH/2,
+        .y = SCREEN_HEIGHT-BORDER_LIMIT-SHIP_WIDTH,
+    };
+
+    return coordinate;
+}
+
+Rectangle get_ship_area(Point coordinate) {
+    Rectangle area = {
+        .x1 = coordinate.x - 22,
+        .y1 = coordinate.y - 22,
+        .x2 = coordinate.x + 22,
+        .y2 = coordinate.y + 22
+    };
+
+    return area;
 }
 
 void ship_fire(Ship *ship, float now) {
@@ -45,70 +63,55 @@ void ship_fire(Ship *ship, float now) {
             ship->gun->chamber = 0;
         }
 
-        printf("Gun position: X: %d, Y: %d\n", ship->gun->pos[0], ship->gun->pos[1]);
-        printf("Ship TOP position: X: %d, Y: %d\n", ship->pos[X1], ship->pos[Y1]);
+        printf("Gun position: X: %.2f, Y: %.2f\n", ship->gun->pos[0], ship->gun->pos[1]);
+        printf("Ship TOP position: X: %.2f, Y: %.2f\n", ship->coordinate.x, ship->coordinate.y);
     }
 }
 
 void ship_move_up(Ship *ship) {
-    if (ship->pos[Y1] - SHIP_SPEED < BORDER_TOP_Y) {
-        ship->pos[Y1] = BORDER_TOP_Y;
-        ship->pos[Y2] = ship->pos[Y1] + SHIP_HEIGHT;
+    if (ship->coordinate.y-22 - SHIP_SPEED < BORDER_TOP_Y) {
+        ship->coordinate.y = BORDER_TOP_Y+22;
     } else {
-        ship->pos[Y1] = ship->pos[Y1] - SHIP_SPEED;
-        ship->pos[Y2] = ship->pos[Y2] - SHIP_SPEED;
+        ship->coordinate.y -= SHIP_SPEED;
     }
+    ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[Y1] = ship->pos[Y1];
+    ship->gun->pos[1] = ship->coordinate.y-22;
 }
 
 void ship_move_right(Ship *ship) {
-    if (ship->pos[X2] + SHIP_SPEED > BORDER_BOTTOM_X) {
-        ship->pos[X2] = BORDER_BOTTOM_X;
-        ship->pos[X1] = ship->pos[X2] - SHIP_WIDTH;
+    if (ship->coordinate.x+22 + SHIP_SPEED > BORDER_BOTTOM_X) {
+        ship->coordinate.x = BORDER_BOTTOM_X-22;
     } else {
-        ship->pos[X2] = ship->pos[X2] + SHIP_SPEED;
-        ship->pos[X1] = ship->pos[X1] + SHIP_SPEED;
+        ship->coordinate.x += SHIP_SPEED;
     }
+    ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[X1] = ship->pos[X1] + SHIP_WIDTH_HALF;
+    ship->gun->pos[0] = ship->coordinate.x;
 }
 
 void ship_move_down(Ship *ship) {
-    if (ship->pos[Y2] + SHIP_SPEED > BORDER_BOTTOM_Y) {
-        ship->pos[Y2] = BORDER_BOTTOM_Y;
-        ship->pos[Y1] = ship->pos[Y2] - SHIP_HEIGHT;
+    if (ship->coordinate.y+22 + SHIP_SPEED > BORDER_BOTTOM_Y) {
+        ship->coordinate.y = BORDER_BOTTOM_Y-22;
     } else {
-        ship->pos[Y2] = ship->pos[Y2] + SHIP_SPEED;
-        ship->pos[Y1] = ship->pos[Y1] + SHIP_SPEED;
+        ship->coordinate.y += SHIP_SPEED;
     }
+    ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[Y1] = ship->pos[Y1];
+    ship->gun->pos[1] = ship->coordinate.y-22;
 }
 
 void ship_move_left(Ship *ship) {
-    if (ship->pos[X1] - SHIP_SPEED < BORDER_TOP_X) {
-        ship->pos[X1] = BORDER_TOP_X;
-        ship->pos[X2] = ship->pos[X1] + SHIP_WIDTH;
+    if (ship->coordinate.x-22 - SHIP_SPEED < BORDER_TOP_X) {
+        ship->coordinate.x = BORDER_TOP_X+22;
     } else {
-        ship->pos[X1] = ship->pos[X1] - SHIP_SPEED;
-        ship->pos[X2] = ship->pos[X2] - SHIP_SPEED;
+        ship->coordinate.x -= SHIP_SPEED;
     }
+    ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[X1] = ship->pos[X1] + SHIP_WIDTH_HALF;
+    ship->gun->pos[0] = ship->coordinate.x;
 }
 
 void ship_render(Ship *ship) {
-    al_draw_bitmap(ship->skin, ship->pos[X1], ship->pos[Y1], ALLEGRO_ALIGN_CENTER);
-}
-
-Rectangle get_ship_area(Ship *ship) {
-    Rectangle area;
-
-    area.x1 = ship->pos[X1];
-    area.y1 = ship->pos[Y1];
-    area.x2 = ship->pos[X2];
-    area.y2 = ship->pos[Y2];
-
-    return area;
+    al_draw_bitmap(ship->skin, ship->coordinate.x-22, ship->coordinate.y-22, ALLEGRO_ALIGN_CENTER);
 }
