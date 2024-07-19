@@ -51,6 +51,8 @@ void handle_key_status(ALLEGRO_KEYBOARD_STATE*, Game*, float);
 
 void compute_game_frame(Game*, float);
 
+void check_ship_screen_collision(Game *game);
+
 void draw_game(Game*, float);
 
 void draw_hud(Game*);

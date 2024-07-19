@@ -62,46 +62,26 @@ void ship_fire(Ship *ship, float now) {
 }
 
 void ship_move_up(Ship *ship) {
-    if (ship->coordinate.y- SHIP_HEIGHT_HALF - SHIP_SPEED < BORDER_TOP_Y) {
-        ship->coordinate.y = BORDER_TOP_Y+SHIP_HEIGHT_HALF;
-    } else {
-        ship->coordinate.y -= SHIP_SPEED;
-    }
+    ship->coordinate.y -= SHIP_SPEED;
     ship->area = get_ship_area(ship->coordinate);
-
-    ship->gun->pos[1] = ship->coordinate.y-SHIP_HEIGHT_HALF;
+    ship->gun->pos[1] = ship->area.y1;
 }
 
 void ship_move_right(Ship *ship) {
-    if (ship->coordinate.x+SHIP_WIDTH_HALF + SHIP_SPEED > BORDER_BOTTOM_X) {
-        ship->coordinate.x = BORDER_BOTTOM_X-SHIP_WIDTH_HALF;
-    } else {
-        ship->coordinate.x += SHIP_SPEED;
-    }
+    ship->coordinate.x += SHIP_SPEED;
     ship->area = get_ship_area(ship->coordinate);
-
     ship->gun->pos[0] = ship->coordinate.x;
 }
 
 void ship_move_down(Ship *ship) {
-    if (ship->coordinate.y+SHIP_HEIGHT_HALF + SHIP_SPEED > BORDER_BOTTOM_Y) {
-        ship->coordinate.y = BORDER_BOTTOM_Y-SHIP_HEIGHT_HALF;
-    } else {
-        ship->coordinate.y += SHIP_SPEED;
-    }
+    ship->coordinate.y += SHIP_SPEED;
     ship->area = get_ship_area(ship->coordinate);
-
-    ship->gun->pos[1] = ship->coordinate.y-SHIP_HEIGHT_HALF;
+    ship->gun->pos[1] = ship->area.y1;
 }
 
 void ship_move_left(Ship *ship) {
-    if (ship->coordinate.x-SHIP_WIDTH_HALF - SHIP_SPEED < BORDER_TOP_X) {
-        ship->coordinate.x = BORDER_TOP_X+SHIP_WIDTH_HALF;
-    } else {
-        ship->coordinate.x -= SHIP_SPEED;
-    }
+    ship->coordinate.x -= SHIP_SPEED;
     ship->area = get_ship_area(ship->coordinate);
-
     ship->gun->pos[0] = ship->coordinate.x;
 }
 

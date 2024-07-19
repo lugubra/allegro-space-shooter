@@ -13,7 +13,14 @@ typedef struct Point {
     float y;
 } Point;
 
+typedef struct Collision {
+    bool top;
+    bool right;
+    bool bottom;
+    bool left;
+} Collision;
+
 bool collision(Rectangle, Rectangle);
-bool box_collision(Rectangle, Rectangle);
+Collision box_collision(Rectangle, Rectangle);
 
 #endif

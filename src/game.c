@@ -73,6 +73,24 @@ void compute_game_frame(Game *game, float now)
     add_asteroid(game, now);
     asteroids_move(game->asteroids);
     bullets_move(game->ship->gun->bullets);
+
+    check_ship_screen_collision(game);
+    // check_ship_asteroid_collision();
+    // check_asteroid_screen_collision();
+}
+
+void check_ship_screen_collision(Game *game)
+{
+    Collision collision = box_collision(game->screen, game->ship->area);
+
+    if (collision.top)
+        ship_move_down(game->ship);
+    if (collision.right)
+        ship_move_left(game->ship);
+    if (collision.bottom)
+        ship_move_up(game->ship);
+    if (collision.left)
+        ship_move_right(game->ship);
 }
 
 void draw_game(Game *game, float now) {
