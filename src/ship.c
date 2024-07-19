@@ -12,12 +12,8 @@ Ship* new_ship() {
     Ship *ship = malloc(sizeof(Ship));
 
     ship->skin = ship_load_skin();
-
     ship->coordinate = ship_initial_position();
     ship->area = get_ship_area(ship->coordinate);
-
-    printf("Ship initial X: %.2f; Ship initial Y: %.2f\n", ship->coordinate.x, ship->coordinate.y);
-
     ship->gun = new_gun(ship->coordinate);
 
     return ship;
@@ -42,10 +38,10 @@ Point ship_initial_position() {
 
 Rectangle get_ship_area(Point coordinate) {
     Rectangle area = {
-        .x1 = coordinate.x - 22,
-        .y1 = coordinate.y - 22,
-        .x2 = coordinate.x + 22,
-        .y2 = coordinate.y + 22
+        .x1 = coordinate.x - SHIP_WIDTH_HALF,
+        .y1 = coordinate.y - SHIP_HEIGHT_HALF,
+        .x2 = coordinate.x + SHIP_WIDTH_HALF,
+        .y2 = coordinate.y + SHIP_HEIGHT_HALF
     };
 
     return area;
@@ -62,26 +58,23 @@ void ship_fire(Ship *ship, float now) {
         } else {
             ship->gun->chamber = 0;
         }
-
-        printf("Gun position: X: %.2f, Y: %.2f\n", ship->gun->pos[0], ship->gun->pos[1]);
-        printf("Ship TOP position: X: %.2f, Y: %.2f\n", ship->coordinate.x, ship->coordinate.y);
     }
 }
 
 void ship_move_up(Ship *ship) {
-    if (ship->coordinate.y-22 - SHIP_SPEED < BORDER_TOP_Y) {
-        ship->coordinate.y = BORDER_TOP_Y+22;
+    if (ship->coordinate.y- SHIP_HEIGHT_HALF - SHIP_SPEED < BORDER_TOP_Y) {
+        ship->coordinate.y = BORDER_TOP_Y+SHIP_HEIGHT_HALF;
     } else {
         ship->coordinate.y -= SHIP_SPEED;
     }
     ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[1] = ship->coordinate.y-22;
+    ship->gun->pos[1] = ship->coordinate.y-SHIP_HEIGHT_HALF;
 }
 
 void ship_move_right(Ship *ship) {
-    if (ship->coordinate.x+22 + SHIP_SPEED > BORDER_BOTTOM_X) {
-        ship->coordinate.x = BORDER_BOTTOM_X-22;
+    if (ship->coordinate.x+SHIP_WIDTH_HALF + SHIP_SPEED > BORDER_BOTTOM_X) {
+        ship->coordinate.x = BORDER_BOTTOM_X-SHIP_WIDTH_HALF;
     } else {
         ship->coordinate.x += SHIP_SPEED;
     }
@@ -91,19 +84,19 @@ void ship_move_right(Ship *ship) {
 }
 
 void ship_move_down(Ship *ship) {
-    if (ship->coordinate.y+22 + SHIP_SPEED > BORDER_BOTTOM_Y) {
-        ship->coordinate.y = BORDER_BOTTOM_Y-22;
+    if (ship->coordinate.y+SHIP_HEIGHT_HALF + SHIP_SPEED > BORDER_BOTTOM_Y) {
+        ship->coordinate.y = BORDER_BOTTOM_Y-SHIP_HEIGHT_HALF;
     } else {
         ship->coordinate.y += SHIP_SPEED;
     }
     ship->area = get_ship_area(ship->coordinate);
 
-    ship->gun->pos[1] = ship->coordinate.y-22;
+    ship->gun->pos[1] = ship->coordinate.y-SHIP_HEIGHT_HALF;
 }
 
 void ship_move_left(Ship *ship) {
-    if (ship->coordinate.x-22 - SHIP_SPEED < BORDER_TOP_X) {
-        ship->coordinate.x = BORDER_TOP_X+22;
+    if (ship->coordinate.x-SHIP_WIDTH_HALF - SHIP_SPEED < BORDER_TOP_X) {
+        ship->coordinate.x = BORDER_TOP_X+SHIP_WIDTH_HALF;
     } else {
         ship->coordinate.x -= SHIP_SPEED;
     }
@@ -113,5 +106,5 @@ void ship_move_left(Ship *ship) {
 }
 
 void ship_render(Ship *ship) {
-    al_draw_bitmap(ship->skin, ship->coordinate.x-22, ship->coordinate.y-22, ALLEGRO_ALIGN_CENTER);
+    al_draw_bitmap(ship->skin, ship->coordinate.x-SHIP_WIDTH_HALF, ship->coordinate.y-SHIP_HEIGHT_HALF, ALLEGRO_ALIGN_CENTER);
 }

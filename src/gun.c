@@ -17,8 +17,6 @@ Gun* new_gun(Point ship_coordinate) {
     gun->pos[0] = ship_coordinate.x;
     gun->pos[1] = ship_coordinate.y - 22;
 
-    printf("Gun X: %.2f; Gun Y: %.2f\n", gun->pos[0], gun->pos[1]);
-
     return gun;
 }
 
