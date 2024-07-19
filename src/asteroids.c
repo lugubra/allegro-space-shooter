@@ -63,10 +63,6 @@ void asteroids_move(Asteroid *asteroids) {
         if (asteroids[i].alive) {
             asteroids[i].coordinate.y += ASTEROID_SPEED;
             asteroids[i].area = get_asteroid_area(asteroids[i].coordinate);
-
-            if (asteroids[i].coordinate.y > BORDER_BOTTOM_Y-ASTEROID_RADIUS) {
-                asteroids[i] = new_asteroid();
-            }
         }
     }
 }

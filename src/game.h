@@ -53,6 +53,8 @@ void compute_game_frame(Game*, float);
 
 void check_ship_screen_collision(Game *game);
 
+void check_asteroid_screen_collision(Game *game);
+
 void draw_game(Game*, float);
 
 void draw_hud(Game*);

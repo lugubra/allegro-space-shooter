@@ -76,7 +76,7 @@ void compute_game_frame(Game *game, float now)
 
     check_ship_screen_collision(game);
     // check_ship_asteroid_collision();
-    // check_asteroid_screen_collision();
+    check_asteroid_screen_collision(game);
 }
 
 void check_ship_screen_collision(Game *game)
@@ -91,6 +91,21 @@ void check_ship_screen_collision(Game *game)
         ship_move_up(game->ship);
     if (collision.left)
         ship_move_right(game->ship);
+}
+
+void check_asteroid_screen_collision(Game *game)
+{
+    Collision collision;
+
+    for (int i = 0; i < ASTEROIDS_MAX; ++i)
+    {
+        if (game->asteroids[i].alive) {
+            collision = box_collision(game->screen, game->asteroids[i].area);
+
+            if(collision.bottom)
+                game->asteroids[i] = new_asteroid();
+        }
+    }
 }
 
 void draw_game(Game *game, float now) {
