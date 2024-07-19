@@ -32,8 +32,8 @@ typedef enum {
 typedef struct Game {
     GameStatus status;
 
+    Rectangle screen;
     Ship *ship;
-
     Asteroid *asteroids;
 
     int score;
@@ -45,7 +45,11 @@ typedef struct Game {
 
 Game* new_game();
 
+Rectangle get_game_screen();
+
 void handle_key_status(ALLEGRO_KEYBOARD_STATE*, Game*, float);
+
+void compute_game_frame(Game*, float);
 
 void draw_game(Game*, float);
 
@@ -55,7 +59,7 @@ void draw_ship(Ship*);
 
 void draw_bullets(Bullet*);
 
-void draw_asteroids(Game*, float);
+void draw_asteroids(Asteroid*);
 
 void ship_crashed(Game*);
 

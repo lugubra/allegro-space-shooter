@@ -24,8 +24,8 @@ bool init_font() {
 Game* new_game() {
     Game *game = malloc(sizeof(Game));
 
+    game->screen = get_game_screen();
     game->ship = new_ship();
-
     game->asteroids = asteroids_init();
 
     game->status = Playing;
@@ -35,6 +35,17 @@ Game* new_game() {
     game->asteroid_spawn_turn = 0;
 
     return game;
+}
+
+Rectangle get_game_screen() {
+    Rectangle screen = {
+        .x1 = BORDER_TOP_X,
+        .y1 = BORDER_TOP_Y,
+        .x2 = BORDER_BOTTOM_X,
+        .y2 = BORDER_BOTTOM_Y
+    };
+
+    return screen;
 }
 
 void handle_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game, float now) {
@@ -57,12 +68,19 @@ void handle_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game, float now) {
         ship_move_left(game->ship);
 }
 
+void compute_game_frame(Game *game, float now)
+{
+    add_asteroid(game, now);
+    asteroids_move(game->asteroids);
+    bullets_move(game->ship->gun->bullets);
+}
+
 void draw_game(Game *game, float now) {
     al_clear_to_color(BACKGROUND_COLOR);
 
     draw_hud(game);
     draw_ship(game->ship);
-    draw_asteroids(game, now);
+    draw_asteroids(game->asteroids);
     draw_bullets(game->ship->gun->bullets);
 
     /** continue programming from the ship_crashed event */
@@ -86,10 +104,10 @@ void draw_hud(Game *game) {
         "LIVES: %d", game->lives
     );
     al_draw_rectangle(
-        BORDER_TOP_X,
-        BORDER_TOP_Y,
-        BORDER_BOTTOM_X,
-        BORDER_BOTTOM_Y,
+        game->screen.x1,
+        game->screen.y1,
+        game->screen.x2,
+        game->screen.y2,
         al_map_rgb(255, 255, 255),
         HUD_WIDTH
     );
@@ -99,14 +117,11 @@ void draw_ship(Ship *ship) {
     ship_render(ship);
 }
 
-void draw_asteroids(Game *game, float now) {
-    add_asteroid(game, now);
-    asteroids_move(game->asteroids);
-    asteroids_render(game->asteroids);
+void draw_asteroids(Asteroid *asteroids) {
+    asteroids_render(asteroids);
 }
 
 void draw_bullets(Bullet *bullets) {
-    bullets_move(bullets);
     bullets_render(bullets);
 }
 

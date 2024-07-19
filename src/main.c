@@ -58,6 +58,8 @@ int main()
 
         handle_key_status(keys, game, now);
 
+        compute_game_frame(game, now);
+
         draw_game(game, now);
 
         al_flip_display();

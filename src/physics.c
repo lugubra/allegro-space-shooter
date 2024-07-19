@@ -20,3 +20,12 @@ bool collision(Rectangle object_1, Rectangle object_2)
 
     return false;
 }
+
+bool box_collision(Rectangle box, Rectangle object)
+{
+    return
+        object.x1 < box.x1 ||
+        object.x2 > box.x2 ||
+        object.y1 < box.y1 ||
+        object.y2 > box.y2;
+}

@@ -14,5 +14,6 @@ typedef struct Point {
 } Point;
 
 bool collision(Rectangle, Rectangle);
+bool box_collision(Rectangle, Rectangle);
 
 #endif
