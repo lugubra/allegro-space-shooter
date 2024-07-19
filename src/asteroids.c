@@ -42,12 +42,12 @@ Point asteroid_initial_position() {
 }
 
 Rectangle get_asteroid_area(Point coordinate) {
-    Rectangle area;
-
-    area.x1 = coordinate.x - ASTEROID_RADIUS;
-    area.y1 = coordinate.y - ASTEROID_RADIUS;
-    area.x2 = coordinate.x + ASTEROID_RADIUS;
-    area.y2 = coordinate.y + ASTEROID_RADIUS;
+    Rectangle area = {
+        .x1 = coordinate.x - ASTEROID_RADIUS,
+        .y1 = coordinate.y - ASTEROID_RADIUS,
+        .x2 = coordinate.x + ASTEROID_RADIUS,
+        .y2 = coordinate.y + ASTEROID_RADIUS
+    };
 
     return area;
 }
@@ -71,13 +71,11 @@ void asteroids_render(Asteroid *asteroids) {
     for (int i = 0; i < ASTEROIDS_MAX; ++i)
     {
         if (asteroids[i].alive)
-        {
             al_draw_filled_circle(
                 asteroids[i].coordinate.x,
                 asteroids[i].coordinate.y,
                 ASTEROID_RADIUS,
                 al_map_rgb(140, 70, 0)
             );
-        }
     }
 }

@@ -70,13 +70,18 @@ void handle_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game, float now) {
 
 void compute_game_frame(Game *game, float now)
 {
+    /** game events */
     add_asteroid(game, now);
+
+    /** game object actions */
     asteroids_move(game->asteroids);
     bullets_move(game->ship->gun->bullets);
 
+    /** trigger events */
     check_ship_screen_collision(game);
-    // check_ship_asteroid_collision();
     check_asteroid_screen_collision(game);
+    check_bullet_screen_collision(game);
+    check_ship_asteroid_collision(game);
 }
 
 void check_ship_screen_collision(Game *game)
@@ -108,6 +113,35 @@ void check_asteroid_screen_collision(Game *game)
     }
 }
 
+void check_bullet_screen_collision(Game *game)
+{
+    Collision collision;
+
+    for (int i = 0; i < BULLETS_MAX; ++i)
+    {
+        if (game->ship->gun->bullets[i].alive) {
+            collision = box_collision(game->screen, game->ship->gun->bullets[i].area);
+
+            if (collision.top)
+                game->ship->gun->bullets[i] = new_bullet();
+        }
+    }
+}
+
+void check_ship_asteroid_collision(Game *game)
+{
+    for (int i = 0; i < ASTEROIDS_MAX; ++i)
+    {
+        if (game->asteroids[i].alive) {
+            if (collision(game->asteroids[i].area, game->ship->area)) {
+                printf("%s\n", "crashed");
+                game->asteroids[i] = new_asteroid();
+                game->lives--;
+            }
+        }
+    }
+}
+
 void draw_game(Game *game, float now) {
     al_clear_to_color(BACKGROUND_COLOR);
 
@@ -115,9 +149,6 @@ void draw_game(Game *game, float now) {
     draw_ship(game->ship);
     draw_asteroids(game->asteroids);
     draw_bullets(game->ship->gun->bullets);
-
-    /** continue programming from the ship_crashed event */
-    ship_crashed(game);
 }
 
 void draw_hud(Game *game) {
@@ -156,21 +187,6 @@ void draw_asteroids(Asteroid *asteroids) {
 
 void draw_bullets(Bullet *bullets) {
     bullets_render(bullets);
-}
-
-void ship_crashed(Game *game) {
-    for (int i = 0; i < ASTEROIDS_MAX; ++i)
-    {
-        if (game->asteroids[i].alive)
-        {
-            if (collision(game->asteroids[i].area, game->ship->area))
-            {
-                printf("%s\n", "crash");
-                game->asteroids[i] = new_asteroid();
-                game->lives--;
-            }
-        }
-    }
 }
 
 void add_asteroid(Game *game, float now) {

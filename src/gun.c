@@ -22,7 +22,7 @@ Gun* new_gun(Point ship_coordinate) {
 
 void gun_insert_bullet_in_chamber(Gun *gun) {
 	gun->bullets[gun->chamber] = new_bullet();
-    gun->bullets[gun->chamber].x = gun->pos[0];
-    gun->bullets[gun->chamber].y = gun->pos[1];
+    gun->bullets[gun->chamber].coordinate.x = gun->pos[0];
+    gun->bullets[gun->chamber].coordinate.y = gun->pos[1];
     gun->bullets[gun->chamber].alive = true;
 }

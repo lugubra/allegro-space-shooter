@@ -55,6 +55,10 @@ void check_ship_screen_collision(Game *game);
 
 void check_asteroid_screen_collision(Game *game);
 
+void check_ship_asteroid_collision(Game *game);
+
+void check_bullet_screen_collision(Game *game);
+
 void draw_game(Game*, float);
 
 void draw_hud(Game*);
@@ -65,11 +69,7 @@ void draw_bullets(Bullet*);
 
 void draw_asteroids(Asteroid*);
 
-void ship_crashed(Game*);
-
 void add_asteroid(Game*, float);
-
-bool collision(Rectangle, Rectangle);
 
 void destroy_game(Game*);
 
