@@ -48,21 +48,59 @@ int main()
 
     while(game->status != Quit)
     {
-        now = al_get_time();
-        al_get_keyboard_state(keys);
+        while(game->status == Menu)
+        {
+            al_get_keyboard_state(keys);
 
-        al_wait_for_event(queue, NULL);
-        al_get_next_event(queue, timerevent);
-        // No need to fill up the queue if we are late drawing frames
-        al_flush_event_queue(queue);
+            al_wait_for_event(queue, NULL);
+            al_get_next_event(queue, timerevent);
+            // No need to fill up the queue if we are late drawing frames
+            al_flush_event_queue(queue);
 
-        handle_key_status(keys, game, now);
+            handle_menu_key_status(keys, game);
 
-        compute_game_frame(game, now);
+            draw_menu(game);
 
-        draw_game(game, now);
+            al_flip_display();
+        }
 
-        al_flip_display();
+        while(game->status == Playing)
+        {
+            now = al_get_time();
+            al_get_keyboard_state(keys);
+
+            al_wait_for_event(queue, NULL);
+            al_get_next_event(queue, timerevent);
+            // No need to fill up the queue if we are late drawing frames
+            al_flush_event_queue(queue);
+
+            handle_key_status(keys, game, now);
+
+            compute_game_frame(game, now);
+
+            draw_game(game, now);
+
+            al_flip_display();
+        }
+
+        while(game->status == Lost)
+        {
+            al_get_keyboard_state(keys);
+
+            al_wait_for_event(queue, NULL);
+            al_get_next_event(queue, timerevent);
+            // No need to fill up the queue if we are late drawing frames
+            al_flush_event_queue(queue);
+
+            handle_menu_key_status(keys, game);
+
+            draw_game_lost(game);
+
+            al_flip_display();
+        }
+
+        if (game->status != Quit)
+            game = new_game();
     }
 
     printf("%s\n", "GAME OVER");

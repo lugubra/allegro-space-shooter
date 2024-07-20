@@ -28,7 +28,7 @@ Game* new_game() {
     game->ship = new_ship();
     game->asteroids = asteroids_init();
 
-    game->status = Playing;
+    game->status = Menu;
     game->score = 0;
     game->lives = LIVES;
     game->asteroid_spawn = ASTEROID_SPAWN;
@@ -46,6 +46,60 @@ Rectangle get_game_screen() {
     };
 
     return screen;
+}
+
+void handle_menu_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game) {
+    if (al_key_down(keys, ALLEGRO_KEY_ESCAPE))
+        game->status = Quit;
+
+    if (al_key_down(keys, ALLEGRO_KEY_ENTER))
+        game->status = Playing;
+}
+
+void draw_menu(Game *game) {
+    al_clear_to_color(BACKGROUND_COLOR);
+
+    draw_hud(game);
+
+    al_draw_textf(
+        font,
+        al_map_rgb(255, 255, 255),
+        SCREEN_WIDTH/2,
+        SCREEN_HEIGHT/2,
+        ALLEGRO_ALIGN_CENTER,
+        "Press <ENTER> to start the game"
+    );
+}
+
+void draw_game_lost(Game *game) {
+    al_clear_to_color(BACKGROUND_COLOR);
+
+    draw_hud(game);
+
+    al_draw_textf(
+        font,
+        al_map_rgb(255, 255, 255),
+        SCREEN_WIDTH/2,
+        SCREEN_HEIGHT/2,
+        ALLEGRO_ALIGN_CENTER,
+        "GAME OVER"
+    );
+    al_draw_textf(
+        font,
+        al_map_rgb(255, 255, 255),
+        SCREEN_WIDTH/2,
+        SCREEN_HEIGHT/2+10,
+        ALLEGRO_ALIGN_CENTER,
+        "Score: %d", game->score
+    );
+    al_draw_textf(
+        font,
+        al_map_rgb(255, 255, 255),
+        SCREEN_WIDTH/2,
+        SCREEN_HEIGHT/2+20,
+        ALLEGRO_ALIGN_CENTER,
+        "Press <ENTER> to start a new game"
+    );
 }
 
 void handle_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game, float now) {
@@ -68,8 +122,7 @@ void handle_key_status(ALLEGRO_KEYBOARD_STATE *keys, Game *game, float now) {
         ship_move_left(game->ship);
 }
 
-void compute_game_frame(Game *game, float now)
-{
+void compute_game_frame(Game *game, float now) {
     /** game events */
     add_asteroid(game, now);
 
@@ -81,11 +134,36 @@ void compute_game_frame(Game *game, float now)
     check_ship_screen_collision(game);
     check_asteroid_screen_collision(game);
     check_bullet_screen_collision(game);
+    check_bullet_asteroid_collision(game);
     check_ship_asteroid_collision(game);
+    check_game_over(game);
 }
 
-void check_ship_screen_collision(Game *game)
-{
+void draw_game(Game *game, float now) {
+    al_clear_to_color(BACKGROUND_COLOR);
+
+    draw_hud(game);
+    draw_ship(game->ship);
+    draw_asteroids(game->asteroids);
+    draw_bullets(game->ship->gun->bullets);
+}
+
+void add_asteroid(Game *game, float now) {
+    // Add asteroid if spawn time elapsed
+    if (now > game->asteroid_spawn)
+    {
+        asteroid_insert_in_list(game->asteroids, game->asteroid_spawn_turn);
+        game->asteroid_spawn = now + ASTEROID_SPAWN;
+
+        if (game->asteroid_spawn_turn < ASTEROIDS_MAX-1) {
+            game->asteroid_spawn_turn++;
+        } else {
+            game->asteroid_spawn_turn = 0;
+        }
+    }
+}
+
+void check_ship_screen_collision(Game *game) {
     Collision collision = box_collision(game->screen, game->ship->area);
 
     if (collision.top)
@@ -98,8 +176,7 @@ void check_ship_screen_collision(Game *game)
         ship_move_right(game->ship);
 }
 
-void check_asteroid_screen_collision(Game *game)
-{
+void check_asteroid_screen_collision(Game *game) {
     Collision collision;
 
     for (int i = 0; i < ASTEROIDS_MAX; ++i)
@@ -113,8 +190,7 @@ void check_asteroid_screen_collision(Game *game)
     }
 }
 
-void check_bullet_screen_collision(Game *game)
-{
+void check_bullet_screen_collision(Game *game) {
     Collision collision;
 
     for (int i = 0; i < BULLETS_MAX; ++i)
@@ -128,8 +204,25 @@ void check_bullet_screen_collision(Game *game)
     }
 }
 
-void check_ship_asteroid_collision(Game *game)
-{
+void check_bullet_asteroid_collision(Game *game) {
+    for (int i = 0; i < BULLETS_MAX; ++i)
+    {
+        if (game->ship->gun->bullets[i].alive) {
+            for (int j = 0; j < ASTEROIDS_MAX; ++j)
+            {
+                if (game->asteroids[j].alive) {
+                    if (collision(game->ship->gun->bullets[i].area, game->asteroids[j].area)) {
+                        game->ship->gun->bullets[i] = new_bullet();
+                        game->asteroids[j] = new_asteroid();
+                        game->score += 10;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void check_ship_asteroid_collision(Game *game) {
     for (int i = 0; i < ASTEROIDS_MAX; ++i)
     {
         if (game->asteroids[i].alive) {
@@ -142,13 +235,9 @@ void check_ship_asteroid_collision(Game *game)
     }
 }
 
-void draw_game(Game *game, float now) {
-    al_clear_to_color(BACKGROUND_COLOR);
-
-    draw_hud(game);
-    draw_ship(game->ship);
-    draw_asteroids(game->asteroids);
-    draw_bullets(game->ship->gun->bullets);
+void check_game_over(Game *game) {
+    if (game->lives < 1)
+        game->status = Lost;
 }
 
 void draw_hud(Game *game) {
@@ -187,21 +276,6 @@ void draw_asteroids(Asteroid *asteroids) {
 
 void draw_bullets(Bullet *bullets) {
     bullets_render(bullets);
-}
-
-void add_asteroid(Game *game, float now) {
-    // Add asteroid if spawn time elapsed
-    if (now > game->asteroid_spawn)
-    {
-        asteroid_insert_in_list(game->asteroids, game->asteroid_spawn_turn);
-        game->asteroid_spawn = now + ASTEROID_SPAWN;
-
-        if (game->asteroid_spawn_turn < ASTEROIDS_MAX-1) {
-            game->asteroid_spawn_turn++;
-        } else {
-            game->asteroid_spawn_turn = 0;
-        }
-    }
 }
 
 void destroy_game(Game *game) {

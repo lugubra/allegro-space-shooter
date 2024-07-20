@@ -10,7 +10,7 @@
 #define ASTEROID_DIAMETER ASTEROID_RADIUS*2
 #define ASTEROID_SPEED 5
 #define ASTEROID_SPAWN 0.2
-#define ASTEROIDS_MAX 10
+#define ASTEROIDS_MAX 20
 
 typedef struct Asteroid {
     Point coordinate;

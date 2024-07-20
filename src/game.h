@@ -26,7 +26,7 @@ bool init_font();
 bool init_ship();
 
 typedef enum {
-    Won, Lost, Paused, Quit, Playing
+    Menu, Score, Playing, Won, Lost, Paused, Quit
 } GameStatus;
 
 typedef struct Game {
@@ -47,19 +47,31 @@ Game* new_game();
 
 Rectangle get_game_screen();
 
+void handle_menu_key_status(ALLEGRO_KEYBOARD_STATE*, Game*);
+
 void handle_key_status(ALLEGRO_KEYBOARD_STATE*, Game*, float);
 
 void compute_game_frame(Game*, float);
 
-void check_ship_screen_collision(Game *game);
-
-void check_asteroid_screen_collision(Game *game);
-
-void check_ship_asteroid_collision(Game *game);
-
-void check_bullet_screen_collision(Game *game);
+void draw_menu(Game*);
 
 void draw_game(Game*, float);
+
+void draw_game_lost(Game*);
+
+void add_asteroid(Game*, float);
+
+void check_ship_screen_collision(Game*);
+
+void check_asteroid_screen_collision(Game*);
+
+void check_ship_asteroid_collision(Game*);
+
+void check_bullet_screen_collision(Game*);
+
+void check_bullet_asteroid_collision(Game*);
+
+void check_game_over(Game*);
 
 void draw_hud(Game*);
 
@@ -68,8 +80,6 @@ void draw_ship(Ship*);
 void draw_bullets(Bullet*);
 
 void draw_asteroids(Asteroid*);
-
-void add_asteroid(Game*, float);
 
 void destroy_game(Game*);
 
