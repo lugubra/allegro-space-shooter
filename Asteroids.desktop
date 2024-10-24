@@ -2,5 +2,5 @@
 Version=1.0
 Type=Application
 Name=Asteroids
-Exec=/home/leandro/Development/C/Asteroids/Asteroids
-Comment=No comments
+Exec=/opt/asteroids/Asteroids
+Comment=Asteroids Allegro game
