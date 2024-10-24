@@ -80,4 +80,4 @@ This will remove the compiled binary and object files from the project directory
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/lugubra/allegro-space-shooter/blob/main/LICENSE) file for more details.
+This project is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
