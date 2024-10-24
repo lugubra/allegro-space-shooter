@@ -81,3 +81,7 @@ This will remove the compiled binary and object files from the project directory
 ## License
 
 This project is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Credits
+
+This project includes third-party assets. See [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) for details on asset usage and licensing.

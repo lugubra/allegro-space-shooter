@@ -6,8 +6,8 @@
 #include "./physics.h"
 #include "./gun.h"
 
-#define SHIP_WIDTH 35
-#define SHIP_HEIGHT 35
+#define SHIP_WIDTH 32
+#define SHIP_HEIGHT 32
 #define SHIP_SPEED 5
 #define SHIP_WIDTH_HALF SHIP_WIDTH / 2
 #define SHIP_HEIGHT_HALF SHIP_HEIGHT / 2
