@@ -14,9 +14,6 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS) | $(BINDIR)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-copy_assets:
-	cp -r $(ASSETS) $(BINDIR)
-
 $(BINDIR):
 	mkdir -p $(BINDIR)
 	cp -r $(ASSETS) $(BINDIR)
@@ -31,10 +28,10 @@ install: $(TARGET)
 
 uninstall:
 	rm -rf $(INSTALLDIR)
-	rm -f $(DESKTOPDIR)/myapp.desktop
+	rm -f $(DESKTOPDIR)/Asteroids.desktop
 
 clean:
-	rm -rf $(TARGET)
-	rm src/*.o
+	rm -rf $(BINDIR)
+	rm -rf src/*.o
 
 .PHONY: all install uninstall clean
