@@ -11,7 +11,7 @@ ASSETS=assets
 LIB_DIR=lib
 SRC_DIR=src
 TARGET=$(RELEASE_DIR)/$(APP_NAME)
-LDFLAGS=-Wall -Wextra -g -lallegro -lallegro_font -lallegro_primitives -lallegro_image
+LDFLAGS=-lallegro -lallegro_font -lallegro_primitives -lallegro_image
 
 SOURCES=$(wildcard $(SRC_DIR)/*.c)
 OBJECTS=$(SOURCES:.c=.o)
@@ -27,10 +27,10 @@ $(RELEASE_DIR):
 
 install: $(TARGET)
 	mkdir -p $(INSTALL_DIR)
-	cp -r $(ASSETS) $(INSTALL_DIR)
+	cp -r $(ASSETS)/ $(INSTALL_DIR)/
 
 	install -D $(TARGET) $(INSTALL_DIR)
-	install -D $(DESKTOP_FILE) $(DESKTOP_DIR)/$(DESKTOP_FILE)
+	install -D Install.desktop $(DESKTOP_DIR)/$(DESKTOP_FILE)
 	chmod +x $(DESKTOP_DIR)/$(DESKTOP_FILE)
 
 uninstall:
@@ -38,11 +38,15 @@ uninstall:
 	rm -f $(DESKTOP_DIR)/$(DESKTOP_FILE)
 
 clean:
+	rm -f Asteroids.AppImage
 	rm -rf $(RELEASE_DIR)
 	rm -rf $(APP_DIR)
 	rm -rf src/*.o
 
-AppImage: $(TARGET)
+AppImage: clean AppDir
+	./package/appimagetool-x86_64.appimage Asteroids.AppDir/ Asteroids.AppImage
+
+AppDir: $(TARGET)
 	# 1. Set up the AppDir structure
 	mkdir -p $(APP_DIR)/usr/bin
 	mkdir -p $(APP_DIR)/usr/lib
@@ -55,15 +59,7 @@ AppImage: $(TARGET)
 	cp package/AppRun-x86_64 $(APP_DIR)/AppRun
 
 	# 3. Create the .desktop file
-	echo "[Desktop Entry]\n\
-	Version=1.1\n\
-	Name=$(APP_NAME)\n\
-	Exec=$(APP_NAME)\n\
-	Icon=$(APP_NAME)\n\
-	StartupWMClass=Asteroids\n\
-	Terminal=false\n\
-	Categories=Game;\n\
-	Type=Application" > $(APP_DIR)/usr/share/applications/$(DESKTOP_FILE)
+	cp AppImage.desktop $(APP_DIR)/usr/share/applications/$(DESKTOP_FILE)
 
 	chmod +x $(APP_DIR)/usr/share/applications/$(DESKTOP_FILE)
 

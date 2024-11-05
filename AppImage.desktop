@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Asteroids
+Exec=Asteroids
+Icon=Asteroids
+StartupWMClass=Asteroids
+Terminal=false
+Categories=Game;
+Type=Application
