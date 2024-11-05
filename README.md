@@ -34,15 +34,25 @@ After cloning, build with make.
 make
 ```
 
-The binary will be generated in the project root directory inside `bin`.
+The binary will be generated in the project root directory inside `release`.
 
 ### Run
 
 After building the application, you can run it using the following command:
 
 ```bash
-./bin/Asteroids
+./release/Asteroids
 ```
+
+### AppImage
+
+To build an AppImage, run:
+
+```bash
+make AppImage
+```
+
+This will create a portable AppImage in the project root called `Asteroids.AppImage`. This is how release packages are published.
 
 ### Install
 
@@ -70,7 +80,7 @@ This will remove the binary, assets, and the installed desktop launcher.
 
 ### Clean
 
-To clean the build files, run:
+To clean all the build files created, run:
 
 ```bash
 make clean
