@@ -7,9 +7,9 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 
-#include "./main.h"
-#include "./game.h"
-#include "./ship.h"
+#include "../inc/main.h"
+#include "../inc/game.h"
+#include "../inc/ship.h"
 
 #define FPS 60
 #define SPAWN 1

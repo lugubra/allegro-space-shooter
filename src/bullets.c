@@ -3,9 +3,9 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "./game.h"
-#include "./bullets.h"
-#include "./gun.h"
+#include "../inc/game.h"
+#include "../inc/bullets.h"
+#include "../inc/gun.h"
 
 Bullet* bullets_init() {
     Bullet *bullets = malloc(sizeof(Bullet) * BULLETS_MAX);

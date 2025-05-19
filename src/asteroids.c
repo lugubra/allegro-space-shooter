@@ -4,9 +4,9 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "./main.h"
-#include "./game.h"
-#include "./asteroids.h"
+#include "../inc/main.h"
+#include "../inc/game.h"
+#include "../inc/asteroids.h"
 
 Asteroid* asteroids_init() {
     Asteroid *asteroids = malloc(sizeof(Asteroid) * ASTEROIDS_MAX);

@@ -6,11 +6,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 
-#include "./main.h"
-#include "./game.h"
-#include "./ship.h"
-#include "./asteroids.h"
-#include "./physics.h"
+#include "../inc/main.h"
+#include "../inc/game.h"
+#include "../inc/ship.h"
+#include "../inc/asteroids.h"
+#include "../inc/physics.h"
 
 ALLEGRO_FONT *font = NULL;
 

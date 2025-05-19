@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "./physics.h"
+#include "../inc/physics.h"
 
 bool collision(Rectangle object_1, Rectangle object_2)
 {

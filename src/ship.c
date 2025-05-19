@@ -3,10 +3,10 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 
-#include "./main.h"
-#include "./game.h"
-#include "./ship.h"
-#include "./gun.h"
+#include "../inc/main.h"
+#include "../inc/game.h"
+#include "../inc/ship.h"
+#include "../inc/gun.h"
 
 Ship* new_ship() {
     Ship *ship = malloc(sizeof(Ship));

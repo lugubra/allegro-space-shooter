@@ -2,10 +2,10 @@
 
 #include <allegro5/allegro5.h>
 
-#include "./gun.h"
-#include "./bullets.h"
-#include "./ship.h"
-#include "./physics.h"
+#include "../inc/gun.h"
+#include "../inc/bullets.h"
+#include "../inc/ship.h"
+#include "../inc/physics.h"
 
 Gun* new_gun(Point ship_coordinate) {
     Gun *gun = malloc(sizeof(Gun));
